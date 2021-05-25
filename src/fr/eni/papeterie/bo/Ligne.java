@@ -30,8 +30,7 @@ public class Ligne {
 
     @Override
     public String toString() {
-        return super.toString()+
-                "Ligne{" +
+        return "Ligne{" +
                 "qte=" + qte +
                 ", article=" + article +
                 '}';

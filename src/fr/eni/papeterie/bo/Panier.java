@@ -26,18 +26,16 @@ public class Panier extends Ligne{
         lignesPanier.remove(getLigne(index));
     }
 
-    @Override
-    public String toString() {
-
-        return super.toString() +"Panier{" +
-                "qte=" + qte +
-                ", article=" + article +
-                ", montant=" + montant +
-                ", lignesPanier=" + lignesPanier +
-                '}';
-    }
-
     public void updateLigne(int index, int newQte) {
         lignesPanier.get(index).setQte(newQte);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString()+
+                "Panier{" +
+                "montant=" + montant +
+                ", lignesPanier=" + lignesPanier +
+                '}';
     }
 }
