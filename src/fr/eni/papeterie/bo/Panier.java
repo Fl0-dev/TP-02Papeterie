@@ -28,7 +28,8 @@ public class Panier extends Ligne{
 
     @Override
     public String toString() {
-        return "Panier{" +
+
+        return super.toString() +"Panier{" +
                 "qte=" + qte +
                 ", article=" + article +
                 ", montant=" + montant +
