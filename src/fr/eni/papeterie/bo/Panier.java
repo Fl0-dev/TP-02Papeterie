@@ -3,16 +3,21 @@ package fr.eni.papeterie.bo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Panier extends Ligne{
-    float montant;
+public class Panier {
+    private float montant;
     List<Ligne> lignesPanier = new ArrayList<>();
 
-    public Panier() {
-
-    }
 
     public float getMontant() {
         return montant;
+    }
+
+    public List<Ligne> getLignesPanier() {
+        return lignesPanier;
+    }
+
+    public void setLignesPanier(List<Ligne> lignesPanier) {
+        this.lignesPanier = lignesPanier;
     }
 
     public Ligne getLigne(int index) {
@@ -27,15 +32,13 @@ public class Panier extends Ligne{
     }
 
     public void updateLigne(int index, int newQte) {
-        lignesPanier.get(index).setQte(newQte);
+        this.getLigne(index).setQte(newQte);
     }
 
     @Override
     public String toString() {
-        return super.toString()+
-                "Panier{" +
-                "montant=" + montant +
-                ", lignesPanier=" + lignesPanier +
+        return
+                "Ligne "+lignesPanier +
                 '}';
     }
 }

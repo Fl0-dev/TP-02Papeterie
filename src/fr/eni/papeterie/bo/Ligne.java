@@ -4,9 +4,6 @@ public class Ligne {
     int qte;
     Article article;
 
-    public Ligne() {
-    }
-
     public Ligne(Article article, int qte) {
         this.qte = qte;
         this.article = article;
@@ -21,8 +18,13 @@ public class Ligne {
     }
 
     public Article getArticle() {
-        return article;
+        return this.article;
     }
+
+    public float getPrix(){
+        return this.article.getPrixUnitaire();
+    }
+
 
     public void setArticle(Article article) {
         this.article = article;
@@ -30,8 +32,9 @@ public class Ligne {
 
     @Override
     public String toString() {
-        return "Ligne{" +
-                "qte=" + qte +
+        return
+                " qte=" + qte +
+                " prix="+getPrix() +
                 ", article=" + article +
                 '}';
     }

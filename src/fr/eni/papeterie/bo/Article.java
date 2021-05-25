@@ -63,7 +63,7 @@ public abstract class Article {
     }
 
     public float getPrixUnitaire() {
-        return prixUnitaire;
+        return this.prixUnitaire;
     }
 
     public void setPrixUnitaire(float prixUnitaire) {
@@ -80,7 +80,7 @@ public abstract class Article {
 
     @Override
     public String toString() {
-        return "Article{" +
+        return  "Article{" +
                 "idArticle=" + idArticle +
                 ", reference='" + reference + '\'' +
                 ", marque='" + marque + '\'' +
