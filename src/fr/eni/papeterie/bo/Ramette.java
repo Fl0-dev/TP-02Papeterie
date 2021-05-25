@@ -26,7 +26,8 @@ public class Ramette extends Article{
 
     @Override
     public String toString() {
-        return "Ramette{" +
+        return super.toString() +
+         "Ramette{" +
                 "grammage=" + grammage +
                 '}';
     }
