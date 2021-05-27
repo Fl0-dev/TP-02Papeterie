@@ -12,8 +12,24 @@ import java.util.List;
  *Classe de la DAL qui gère la relation avec la DB PAPETERIE
  */
 public class ArticleDAOJdbcImpl {
-
+    //constante du chemin de la DB
     private final String URL = "jdbc:sqlite:PAPETERIE_DB.sqlite";
+    //constante pour la requête de insert()
+    private final String SQLINSERT = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,grammage,couleur,type)" +
+            "VALUES (?,?,?,?,?,?,?,?);";
+    //constante pour la requête de delete()
+    private final String SQLDELETE = "DELETE FROM Articles WHERE idArticle =?;";
+    //constante pour la requête de selectById()
+    private final String SQLSELECTID = "SELECT idArticle, reference, marque, designation, prixUnitaire, qteStock, grammage, couleur, type FROM Articles WHERE idArticle=?;";
+    //constante pour la requête de update()
+    private final String SQLUPDATE = "UPDATE Articles SET reference=?,marque=?,designation=?,prixUnitaire=?,qteStock=?,grammage=?,couleur=? WHERE idArticle=?;";
+            /*"reference ='" + article.getReference() + "', " +
+            "marque ='" + article.getMarque() + "', " +
+            "designation ='" + article.getDesignation() + "', " +
+            "qteStock =" + article.getQteStock() + ", " +
+            "prixUnitaire =" + article.getPrixUnitaire() + ", " +
+            type +
+            " WHERE idArticle=" + article.getIdArticle() + ";";*/
 
     /**
      * permet de retouner tous les articles de la DB
@@ -28,7 +44,7 @@ public class ArticleDAOJdbcImpl {
              Statement requete = connection.createStatement()) {
             String sql = "SELECT * FROM Articles;";
             ResultSet rs = requete.executeQuery(sql);
-            Article article = null;
+            Article article;
             while (rs.next()) {
                 int id = rs.getInt("idArticle");
                 String ref = rs.getString("reference");
@@ -63,11 +79,11 @@ public class ArticleDAOJdbcImpl {
         Article article = null;
         //ouverture de la connexion à la DB
         try (Connection connection = DriverManager.getConnection(URL);
-             Statement requete = connection.createStatement()) {
-            //requète SQL
-            String sql = "SELECT idArticle, reference, marque, designation, prixUnitaire, qteStock, grammage, couleur, type FROM Articles WHERE idArticle=" + id;
-            //récupération de la requète dans une variable
-            ResultSet rs = requete.executeQuery(sql);
+             PreparedStatement requete = connection.prepareStatement(SQLSELECTID)) {
+            //requète SQL             select * from Articles Where id = ?
+            //initialisation de SQLSELECTID
+            requete.setInt(1,id);
+            ResultSet rs = requete.executeQuery();
             //si l'id est valide
             if (rs.next()) {
                 String ref = rs.getString("reference");
@@ -103,33 +119,42 @@ public class ArticleDAOJdbcImpl {
     public void update(Article article) {
 
         try (Connection connection = DriverManager.getConnection(URL);
-             Statement requete = connection.createStatement()) {
+             PreparedStatement requete = connection.prepareStatement(SQLUPDATE)) {
 
             //initialisation et déclaration de la variable type
             String type = "";
             //si stylo
             if (article instanceof Stylo) {
                 //on met dans la requète la couleur du stylo (on caste l'article en Stylo car le getter n'est pas dans article mais dans Stylo
-                type = "couleur ='" + ((Stylo) article).getCouleur() + "'";
+                //type = "couleur ='" + ((Stylo) article).getCouleur() + "'";
+                requete.setString(7,((Stylo) article).getCouleur());
             }
             //si ramette est le type de l'instance article
             if (article instanceof Ramette) {
                 //on met dans la requète le grammage de la ramette (on caste l'article en Ramette car le getter n'est pas dans article mais dans Ramette
-                type = "grammage=" + ((Ramette) article).getGrammage() + "";
+                //type = "grammage=" + ((Ramette) article).getGrammage() + "";
+                requete.setInt(6,((Ramette) article).getGrammage());
             }
             //Construction de la requète
             //!!!!!!PENSEZ AUX SIMPLES '' POUR ENTOURER LES STRING DANS UNE REQUETE SQL
-            String sql = "UPDATE Articles SET " +
+            /*String SQLUPDATE = "UPDATE Articles SET " +
                     "reference ='" + article.getReference() + "', " +
                     "marque ='" + article.getMarque() + "', " +
                     "designation ='" + article.getDesignation() + "', " +
                     "qteStock =" + article.getQteStock() + ", " +
                     "prixUnitaire =" + article.getPrixUnitaire() + ", " +
                     type +
-                    " WHERE idArticle=" + article.getIdArticle() + ";";
-            requete.executeUpdate(sql);
+                    " WHERE idArticle=" + article.getIdArticle() + ";";*/
+            //initialisation de SQLUPDATE
+            requete.setString(1, article.getReference());
+            requete.setString(2, article.getMarque());
+            requete.setString(3, article.getDesignation());
+            requete.setFloat(4,article.getPrixUnitaire());
+            requete.setInt(5,article.getQteStock());
+
+            requete.executeUpdate();
             System.out.println("L''article a été bien modifié");
-            requete.close();
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -144,11 +169,11 @@ public class ArticleDAOJdbcImpl {
     public void insert(Article article) {
         //ouverture de la connexion à la DB
         try (Connection connection = DriverManager.getConnection(URL);
-             Statement requete = connection.createStatement()) {
+             PreparedStatement requete = connection.prepareStatement(SQLINSERT)) {
             //si stylo
             if (article instanceof Stylo) {
                 //création de la requête
-                String sql = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,grammage,couleur,type)" +
+                /*String sqlInsert = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,grammage,couleur,type)" +
                         "VALUES (" +
                         "'" + article.getReference() + "'," +
                         "'" + article.getMarque() + "'," +
@@ -157,9 +182,17 @@ public class ArticleDAOJdbcImpl {
                         "" + article.getPrixUnitaire() + "," +
                         "null," +
                         "'" + ((Stylo) article).getCouleur() + "'," +
-                        "'STYLO');";
+                        "'STYLO');";*/
+                //initialisation de SQLINSERT
+                requete.setString(1,article.getReference());
+                requete.setString(2,article.getMarque());
+                requete.setString(3,article.getDesignation());
+                requete.setInt(4,article.getQteStock());
+                requete.setFloat(5,article.getPrixUnitaire());
+                requete.setString(7,((Stylo) article).getCouleur());
+                requete.setString(8,"STYLO");
                 // exécution
-                requete.executeUpdate(sql);
+                requete.executeUpdate();
                 // pour récupérer l'id auto incrémenté
                 ResultSet rs = requete.getGeneratedKeys();
                 if (rs.next()) {
@@ -171,7 +204,7 @@ public class ArticleDAOJdbcImpl {
             //si stylo
             if (article instanceof Ramette) {
                 //création de la requête
-                String sql = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,grammage,couleur,type)" +
+                /*String sqlInsert = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,grammage,couleur,type)" +
                         "VALUES (" + "'" + article.getReference() + "'," +
                         "'" + article.getMarque() + "'," +
                         "'" + article.getDesignation() + "'," +
@@ -179,9 +212,17 @@ public class ArticleDAOJdbcImpl {
                         "" + article.getPrixUnitaire() + "," +
                         "" + ((Ramette) article).getGrammage() + "," +
                         "null," +
-                        "'RAMETTE');";
+                        "'RAMETTE');";*/
+                //initialisation de SQLINSERT
+                requete.setString(1,article.getReference());
+                requete.setString(2,article.getMarque());
+                requete.setString(3,article.getDesignation());
+                requete.setInt(4,article.getQteStock());
+                requete.setFloat(5,article.getPrixUnitaire());
+                requete.setInt(6,((Ramette) article).getGrammage());
+                requete.setString(8,"RAMETTE");
                 // exécution
-                requete.executeUpdate(sql);//sous sqlServer requete.executeUpdate(sql,statement.RETURN_GENERATED_KEY);
+                requete.executeUpdate();//sous sqlServer requete.executeUpdate(sql,statement.RETURN_GENERATED_KEY);
                 // pour récupérer l'id auto incrémenté
                 ResultSet rs = requete.getGeneratedKeys();
                 if (rs.next()) {
@@ -206,11 +247,13 @@ public class ArticleDAOJdbcImpl {
         try {
             //connexion à la DB
             Connection connection = DriverManager.getConnection(URL);
-            Statement requete = connection.createStatement();
+            PreparedStatement requete = connection.prepareStatement(SQLDELETE);
             //requête SQL
-            String sql = "DELETE FROM Articles WHERE idArticle =" + id;
+            //String sqlDelete = "DELETE FROM Articles WHERE idArticle =" + id;
+            //initialisation des valeurs de SQLDELETE
+            requete.setInt(1,id);
             //exécution
-            requete.executeUpdate(sql);
+            requete.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
