@@ -11,9 +11,9 @@ import java.util.List;
 /**
  *Classe de la DAL qui gère la relation avec la DB PAPETERIE
  */
-public class ArticleDAOJdbcImpl {
-    //constante du chemin de la DB
-    private final String URL = "jdbc:sqlite:PAPETERIE_DB.sqlite";
+public class ArticleDAOJdbcImpl implements ArticleDAO{
+    //constante du chemin de la DB (dans le fichier settings
+    private final String URL = Settings.getPropriete("url");
     //constante pour la requête de insert()
     private final String SQLINSERT = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,grammage,couleur,type)" +
             "VALUES (?,?,?,?,?,?,?,?);";
@@ -24,17 +24,17 @@ public class ArticleDAOJdbcImpl {
     //constante pour la requête de update()
     private final String SQLUPDATE = "UPDATE Articles SET reference=?,marque=?,designation=?,prixUnitaire=?,qteStock=?,grammage=?,couleur=? WHERE idArticle=?;";
 
-
     /**
      * permet de retouner tous les articles de la DB
      * @return articleListe
      */
+    @Override
     public List<Article> selectAll() {
         List<Article> articleList = new ArrayList<>();
         //tout ce qui est ouvert dans le try se fermera à la fin du try
         //try with ressourcies
         //ouverture de la connection vers DB
-        try (Connection connection = DriverManager.getConnection(URL);
+        try (Connection connection = JdbcTools.recupConnection();
              Statement requete = connection.createStatement()) {
             String sql = "SELECT * FROM Articles;";
             ResultSet rs = requete.executeQuery(sql);
@@ -69,10 +69,11 @@ public class ArticleDAOJdbcImpl {
      * @param id l'id de l'article recherché
      * @return article
      */
+    @Override
     public Article selectById(Integer id) {
         Article article = null;
         //ouverture de la connexion à la DB
-        try (Connection connection = DriverManager.getConnection(URL);
+        try (Connection connection = JdbcTools.recupConnection();
              PreparedStatement requete = connection.prepareStatement(SQLSELECTID)) {
             //initialisation de SQLSELECTID
             requete.setInt(1,id);
@@ -109,9 +110,10 @@ public class ArticleDAOJdbcImpl {
      * avec un article de Java
      * @param article à modifier
      */
+    @Override
     public void update(Article article) {
 
-        try (Connection connection = DriverManager.getConnection(URL);
+        try (Connection connection = JdbcTools.recupConnection();
              PreparedStatement requete = connection.prepareStatement(SQLUPDATE)) {
 
             //initialisation et déclaration de la variable type
@@ -159,9 +161,10 @@ public class ArticleDAOJdbcImpl {
      * permet d'insérer un article dans la table
      * @param article à insérer
      */
+    @Override
     public void insert(Article article) {
         //ouverture de la connexion à la DB
-        try (Connection connection = DriverManager.getConnection(URL);
+        try (Connection connection = JdbcTools.recupConnection();
              PreparedStatement requete = connection.prepareStatement(SQLINSERT)) {
             //si stylo
             if (article instanceof Stylo) {
@@ -216,11 +219,12 @@ public class ArticleDAOJdbcImpl {
      * suppression d'un article grâce à son id
      * @param id de l'article
      */
+    @Override
     public void delete(Integer id) {
 
         try {
             //connexion à la DB
-            Connection connection = DriverManager.getConnection(URL);
+            Connection connection = JdbcTools.recupConnection();
             PreparedStatement requete = connection.prepareStatement(SQLDELETE);
             //requête SQL
             //String sqlDelete = "DELETE FROM Articles WHERE idArticle =" + id;

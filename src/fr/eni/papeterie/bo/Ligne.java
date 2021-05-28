@@ -1,14 +1,20 @@
 package fr.eni.papeterie.bo;
 
+/**
+ * Classe qui permet de faire une ligne
+ * qui contient un article et sa quantité
+ */
 public class Ligne {
     int qte;
     Article article;
 
+    //////////////////Constructeurs///////////////////////
     public Ligne(Article article, int qte) {
         this.qte = qte;
         this.article = article;
     }
 
+    //////////////////Getters/Setters///////////////////////
     public int getQte() {
         return qte;
     }
@@ -21,15 +27,15 @@ public class Ligne {
         return this.article;
     }
 
-    public float getPrix(){
-        return this.article.getPrixUnitaire();
-    }
-
-
     public void setArticle(Article article) {
         this.article = article;
     }
 
+    public float getPrix(){
+        return this.article.getPrixUnitaire();
+    }
+
+    //////////////////Méthode toString///////////////////////
     @Override
     public String toString() {
         return
