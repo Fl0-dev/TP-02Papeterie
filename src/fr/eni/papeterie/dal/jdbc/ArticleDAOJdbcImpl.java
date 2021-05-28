@@ -23,13 +23,7 @@ public class ArticleDAOJdbcImpl {
     private final String SQLSELECTID = "SELECT idArticle, reference, marque, designation, prixUnitaire, qteStock, grammage, couleur, type FROM Articles WHERE idArticle=?;";
     //constante pour la requête de update()
     private final String SQLUPDATE = "UPDATE Articles SET reference=?,marque=?,designation=?,prixUnitaire=?,qteStock=?,grammage=?,couleur=? WHERE idArticle=?;";
-            /*"reference ='" + article.getReference() + "', " +
-            "marque ='" + article.getMarque() + "', " +
-            "designation ='" + article.getDesignation() + "', " +
-            "qteStock =" + article.getQteStock() + ", " +
-            "prixUnitaire =" + article.getPrixUnitaire() + ", " +
-            type +
-            " WHERE idArticle=" + article.getIdArticle() + ";";*/
+
 
     /**
      * permet de retouner tous les articles de la DB
@@ -80,7 +74,6 @@ public class ArticleDAOJdbcImpl {
         //ouverture de la connexion à la DB
         try (Connection connection = DriverManager.getConnection(URL);
              PreparedStatement requete = connection.prepareStatement(SQLSELECTID)) {
-            //requète SQL             select * from Articles Where id = ?
             //initialisation de SQLSELECTID
             requete.setInt(1,id);
             ResultSet rs = requete.executeQuery();
@@ -125,17 +118,17 @@ public class ArticleDAOJdbcImpl {
             String type = "";
             //si stylo
             if (article instanceof Stylo) {
-                //on met dans la requète la couleur du stylo (on caste l'article en Stylo car le getter n'est pas dans article mais dans Stylo
+                //on met dans la requête la couleur du stylo (on caste l'article en Stylo car le getter n'est pas dans article mais dans Stylo
                 //type = "couleur ='" + ((Stylo) article).getCouleur() + "'";
                 requete.setString(7,((Stylo) article).getCouleur());
             }
             //si ramette est le type de l'instance article
             if (article instanceof Ramette) {
-                //on met dans la requète le grammage de la ramette (on caste l'article en Ramette car le getter n'est pas dans article mais dans Ramette
+                //on met dans la requête le grammage de la ramette (on caste l'article en Ramette car le getter n'est pas dans article mais dans Ramette
                 //type = "grammage=" + ((Ramette) article).getGrammage() + "";
                 requete.setInt(6,((Ramette) article).getGrammage());
             }
-            //Construction de la requète
+            //Construction de la requête si requête normale
             //!!!!!!PENSEZ AUX SIMPLES '' POUR ENTOURER LES STRING DANS UNE REQUETE SQL
             /*String SQLUPDATE = "UPDATE Articles SET " +
                     "reference ='" + article.getReference() + "', " +
@@ -172,17 +165,7 @@ public class ArticleDAOJdbcImpl {
              PreparedStatement requete = connection.prepareStatement(SQLINSERT)) {
             //si stylo
             if (article instanceof Stylo) {
-                //création de la requête
-                /*String sqlInsert = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,grammage,couleur,type)" +
-                        "VALUES (" +
-                        "'" + article.getReference() + "'," +
-                        "'" + article.getMarque() + "'," +
-                        "'" + article.getDesignation() + "'," +
-                        "" + article.getQteStock() + "," +
-                        "" + article.getPrixUnitaire() + "," +
-                        "null," +
-                        "'" + ((Stylo) article).getCouleur() + "'," +
-                        "'STYLO');";*/
+
                 //initialisation de SQLINSERT
                 requete.setString(1,article.getReference());
                 requete.setString(2,article.getMarque());
@@ -203,16 +186,7 @@ public class ArticleDAOJdbcImpl {
             }
             //si stylo
             if (article instanceof Ramette) {
-                //création de la requête
-                /*String sqlInsert = "INSERT INTO Articles (reference,marque,designation,prixUnitaire,qteStock,grammage,couleur,type)" +
-                        "VALUES (" + "'" + article.getReference() + "'," +
-                        "'" + article.getMarque() + "'," +
-                        "'" + article.getDesignation() + "'," +
-                        "" + article.getQteStock() + "," +
-                        "" + article.getPrixUnitaire() + "," +
-                        "" + ((Ramette) article).getGrammage() + "," +
-                        "null," +
-                        "'RAMETTE');";*/
+
                 //initialisation de SQLINSERT
                 requete.setString(1,article.getReference());
                 requete.setString(2,article.getMarque());
@@ -222,7 +196,7 @@ public class ArticleDAOJdbcImpl {
                 requete.setInt(6,((Ramette) article).getGrammage());
                 requete.setString(8,"RAMETTE");
                 // exécution
-                requete.executeUpdate();//sous sqlServer requete.executeUpdate(sql,statement.RETURN_GENERATED_KEY);
+                requete.executeUpdate();//sous sqlServer requête.executeUpdate(sql,statement.RETURN_GENERATED_KEY);
                 // pour récupérer l'id auto incrémenté
                 ResultSet rs = requete.getGeneratedKeys();
                 if (rs.next()) {
