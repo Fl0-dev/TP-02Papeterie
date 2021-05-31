@@ -1,6 +1,8 @@
 package fr.eni.papeterie.dal.jdbc;
 
+import fr.eni.papeterie.bll.BLLException;
 import fr.eni.papeterie.bo.Article;
+import fr.eni.papeterie.bo.DALException;
 
 import java.util.List;
 
@@ -11,9 +13,9 @@ import java.util.List;
  */
 public interface ArticleDAO {
 
-    Article selectById(Integer id);
-    List<Article> selectAll();
-    void insert(Article article);
-    void update(Article article);
-    void delete(Integer id);
+    Article selectById(Integer id) throws BLLException, DALException;
+    List<Article> selectAll() throws BLLException, DALException;
+    void insert(Article article) throws BLLException, DALException;
+    void update(Article article) throws BLLException, DALException;
+    void delete(Integer id) throws BLLException, DALException;
 }

@@ -1,6 +1,8 @@
 package fr.eni.papeterie.dal.jdbc;
 
+import fr.eni.papeterie.bll.BLLException;
 import fr.eni.papeterie.bo.Article;
+import fr.eni.papeterie.bo.DALException;
 import fr.eni.papeterie.bo.Ramette;
 import fr.eni.papeterie.bo.Stylo;
 
@@ -9,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *Classe de la DAL qui gère la relation avec la DB PAPETERIE
+ * Classe de la DAL qui gère la relation avec la DB PAPETERIE
  */
-public class ArticleDAOJdbcImpl implements ArticleDAO{
+public class ArticleDAOJdbcImpl implements ArticleDAO {
     //constante du chemin de la DB (dans le fichier settings
     private final String URL = Settings.getPropriete("url");
     //constante pour la requête de insert()
@@ -26,10 +28,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 
     /**
      * permet de retouner tous les articles de la DB
+     *
      * @return articleListe
      */
     @Override
-    public List<Article> selectAll() {
+    public List<Article> selectAll() throws BLLException, DALException {
         List<Article> articleList = new ArrayList<>();
         //tout ce qui est ouvert dans le try se fermera à la fin du try
         //try with ressourcies
@@ -56,8 +59,8 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
                 }
                 articleList.add(article);
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            throw new DALException("Souci avec la méthode selectAll");
         }
         //retourne la liste des articles
         return articleList;
@@ -66,17 +69,18 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 
     /**
      * retourne un article grâce à son id
+     *
      * @param id l'id de l'article recherché
      * @return article
      */
     @Override
-    public Article selectById(Integer id) {
+    public Article selectById(Integer id) throws DALException {
         Article article = null;
         //ouverture de la connexion à la DB
         try (Connection connection = JdbcTools.recupConnection();
              PreparedStatement requete = connection.prepareStatement(SQLSELECTID)) {
             //initialisation de SQLSELECTID
-            requete.setInt(1,id);
+            requete.setInt(1, id);
             ResultSet rs = requete.executeQuery();
             //si l'id est valide
             if (rs.next()) {
@@ -99,8 +103,8 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
                 }
             }
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            throw new DALException("Souci avec la méthode selectById");
         }
         return article;
     }
@@ -108,10 +112,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
     /**
      * permet de modifier un article de la table
      * avec un article de Java
+     *
      * @param article à modifier
      */
     @Override
-    public void update(Article article) {
+    public void update(Article article) throws DALException {
 
         try (Connection connection = JdbcTools.recupConnection();
              PreparedStatement requete = connection.prepareStatement(SQLUPDATE)) {
@@ -122,13 +127,13 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
             if (article instanceof Stylo) {
                 //on met dans la requête la couleur du stylo (on caste l'article en Stylo car le getter n'est pas dans article mais dans Stylo
                 //type = "couleur ='" + ((Stylo) article).getCouleur() + "'";
-                requete.setString(7,((Stylo) article).getCouleur());
+                requete.setString(7, ((Stylo) article).getCouleur());
             }
             //si ramette est le type de l'instance article
             if (article instanceof Ramette) {
                 //on met dans la requête le grammage de la ramette (on caste l'article en Ramette car le getter n'est pas dans article mais dans Ramette
                 //type = "grammage=" + ((Ramette) article).getGrammage() + "";
-                requete.setInt(6,((Ramette) article).getGrammage());
+                requete.setInt(6, ((Ramette) article).getGrammage());
             }
             //Construction de la requête si requête normale
             //!!!!!!PENSEZ AUX SIMPLES '' POUR ENTOURER LES STRING DANS UNE REQUETE SQL
@@ -144,14 +149,14 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
             requete.setString(1, article.getReference());
             requete.setString(2, article.getMarque());
             requete.setString(3, article.getDesignation());
-            requete.setFloat(4,article.getPrixUnitaire());
-            requete.setInt(5,article.getQteStock());
+            requete.setFloat(4, article.getPrixUnitaire());
+            requete.setInt(5, article.getQteStock());
 
             requete.executeUpdate();
             System.out.println("L''article a été bien modifié");
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            throw new DALException("Souci avec la méthode update");
         }
 
 
@@ -159,10 +164,11 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
 
     /**
      * permet d'insérer un article dans la table
+     *
      * @param article à insérer
      */
     @Override
-    public void insert(Article article) {
+    public void insert(Article article) throws DALException {
         //ouverture de la connexion à la DB
         try (Connection connection = JdbcTools.recupConnection();
              PreparedStatement requete = connection.prepareStatement(SQLINSERT)) {
@@ -170,13 +176,13 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
             if (article instanceof Stylo) {
 
                 //initialisation de SQLINSERT
-                requete.setString(1,article.getReference());
-                requete.setString(2,article.getMarque());
-                requete.setString(3,article.getDesignation());
-                requete.setInt(4,article.getQteStock());
-                requete.setFloat(5,article.getPrixUnitaire());
-                requete.setString(7,((Stylo) article).getCouleur());
-                requete.setString(8,"STYLO");
+                requete.setString(1, article.getReference());
+                requete.setString(2, article.getMarque());
+                requete.setString(3, article.getDesignation());
+                requete.setInt(4, article.getQteStock());
+                requete.setFloat(5, article.getPrixUnitaire());
+                requete.setString(7, ((Stylo) article).getCouleur());
+                requete.setString(8, "STYLO");
                 // exécution
                 requete.executeUpdate();
                 // pour récupérer l'id auto incrémenté
@@ -191,13 +197,13 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
             if (article instanceof Ramette) {
 
                 //initialisation de SQLINSERT
-                requete.setString(1,article.getReference());
-                requete.setString(2,article.getMarque());
-                requete.setString(3,article.getDesignation());
-                requete.setInt(4,article.getQteStock());
-                requete.setFloat(5,article.getPrixUnitaire());
-                requete.setInt(6,((Ramette) article).getGrammage());
-                requete.setString(8,"RAMETTE");
+                requete.setString(1, article.getReference());
+                requete.setString(2, article.getMarque());
+                requete.setString(3, article.getDesignation());
+                requete.setInt(4, article.getQteStock());
+                requete.setFloat(5, article.getPrixUnitaire());
+                requete.setInt(6, ((Ramette) article).getGrammage());
+                requete.setString(8, "RAMETTE");
                 // exécution
                 requete.executeUpdate();//sous sqlServer requête.executeUpdate(sql,statement.RETURN_GENERATED_KEY);
                 // pour récupérer l'id auto incrémenté
@@ -209,18 +215,19 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
                 }
 
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            throw new DALException("Souci avec la méthode insert");
         }
 
     }
 
     /**
      * suppression d'un article grâce à son id
+     *
      * @param id de l'article
      */
     @Override
-    public void delete(Integer id) {
+    public void delete(Integer id) throws DALException {
 
         try {
             //connexion à la DB
@@ -229,12 +236,12 @@ public class ArticleDAOJdbcImpl implements ArticleDAO{
             //requête SQL
             //String sqlDelete = "DELETE FROM Articles WHERE idArticle =" + id;
             //initialisation des valeurs de SQLDELETE
-            requete.setInt(1,id);
+            requete.setInt(1, id);
             //exécution
             requete.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        } catch (SQLException e) {
+            throw new DALException("Souci avec la méthode delete");
 
+        }
     }
 }
