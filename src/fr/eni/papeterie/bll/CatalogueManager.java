@@ -43,17 +43,16 @@ public class CatalogueManager {
 
         try {
             ArticleDAO articleDAO = DAOFactory.getArticleDAO();
-            Article article = articleDAO.selectById(id);
-            return article;
+            return articleDAO.selectById(id);
         } catch (DALException e) {
             throw new BLLException(e.getMessage());
         }
     }
 
     /**
-     *
+     *récupère la liste de tous les articles
      * @return la liste des articles
-     * @throws BLLException
+     * @throws BLLException si souci SQL
      */
     public List<Article> getCatalogue() throws BLLException {
         List<Article> list;
@@ -66,6 +65,10 @@ public class CatalogueManager {
         return list;
     }
 
+    /** ajoute un article
+     * @param article à ajouter
+     * @throws BLLException
+     */
     public void addArticle(Article article) throws BLLException {
         try {
             ArticleDAO articleDAO = DAOFactory.getArticleDAO();
@@ -77,6 +80,11 @@ public class CatalogueManager {
         }
     }
 
+    /**
+     * permet de modifier un article
+     * @param article à modifier
+     * @throws BLLException si souci SQL
+     */
     public void updateArticle(Article article) throws BLLException {
 
         try {
@@ -90,6 +98,11 @@ public class CatalogueManager {
         }
     }
 
+    /**
+     * permet de supprimer un article
+     * @param id de l'article
+     * @throws BLLException si souci de SQL
+     */
     public void removeArticle(Integer id) throws BLLException {
 
         try {
@@ -102,11 +115,17 @@ public class CatalogueManager {
     }
 
 
+    /**
+     * permet de vérifier si l'article en paramètre contient une erreur
+     * @param article à tester
+     * @throws BLLException si souci de grammage, de couleur,
+     * sur le nombre d'attribut de l'article et sur la quantité
+     */
     public void validerArticle(Article article) throws BLLException {
         if (article instanceof Ramette && ((Ramette) article).getGrammage() <= 0) {
             throw new BLLException("Le grammage doit être positif");
         }
-        if (article instanceof Stylo && ((Stylo) article).getCouleur() == null ||((Stylo) article).getCouleur().trim().length()==0) {
+        if (article instanceof Stylo && ((Stylo) article).getCouleur() == null) {
             throw new BLLException("La couleur n'est pas valide");
         }
         if (article.getQteStock() < 1) {
