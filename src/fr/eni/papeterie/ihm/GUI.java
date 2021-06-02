@@ -1,5 +1,7 @@
 package fr.eni.papeterie.ihm;
 
+import fr.eni.papeterie.bo.Couleur;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -36,7 +38,7 @@ public class GUI extends JFrame {
     private JCheckBox g80;
     private JCheckBox g100;
     //ComboBox
-    public JComboBox<String> boxCouleur;
+    public JComboBox<Couleur> boxCouleur;
     //Buttons
     public JButton arriere;
     public JButton avant;
@@ -99,36 +101,31 @@ public class GUI extends JFrame {
     //Singleton TextField
     public JTextField getRefTexte() {
         if (refTexte == null) {
-            refTexte = new JTextField();
-            refTexte.setColumns(20);
+            refTexte = new JTextField(20);
         }
         return refTexte;
     }
     public JTextField getDesignationTexte() {
         if (designationTexte == null) {
-            designationTexte = new JTextField();
-            designationTexte.setColumns(20);
+            designationTexte = new JTextField(20);
         }
         return designationTexte;
     }
     public JTextField getMarqueTexte() {
         if (marqueTexte == null) {
-            marqueTexte = new JTextField();
-            marqueTexte.setColumns(20);
+            marqueTexte = new JTextField(20);
         }
         return marqueTexte;
     }
     public JTextField getStockTexte() {
         if (stockTexte == null) {
-            stockTexte = new JTextField();
-            stockTexte.setColumns(20);
+            stockTexte = new JTextField(20);
         }
         return stockTexte;
     }
     public JTextField getPrixTexte() {
         if (prixTexte == null) {
-            prixTexte = new JTextField();
-            prixTexte.setColumns(20);
+            prixTexte = new JTextField(20);
         }
         return prixTexte;
     }
@@ -159,9 +156,10 @@ public class GUI extends JFrame {
         return g100;
     }
     //Singleton ComboBox
-    public JComboBox<String> getBoxCouleur() {
+    public JComboBox<Couleur> getBoxCouleur() {
         if (boxCouleur == null) {
-            boxCouleur = new JComboBox<String>();
+            //Utilisation de l'énumération Couleur
+            boxCouleur = new JComboBox<>(Couleur.values());
         }
         return boxCouleur;
     }
