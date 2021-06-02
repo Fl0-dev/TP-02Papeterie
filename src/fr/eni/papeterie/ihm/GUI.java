@@ -1,9 +1,16 @@
 package fr.eni.papeterie.ihm;
 
+import fr.eni.papeterie.bll.BLLException;
+import fr.eni.papeterie.bll.CatalogueManager;
+import fr.eni.papeterie.bo.Article;
 import fr.eni.papeterie.bo.Couleur;
+import fr.eni.papeterie.bo.Ramette;
+import fr.eni.papeterie.bo.Stylo;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Création de l'affichage
@@ -28,6 +35,7 @@ public class GUI extends JFrame {
     private JLabel typ;
     private JLabel grammage;
     private JLabel couleur;
+    private JLabel affichage;
     //TextFields
     private JTextField refTexte;
     private JTextField designationTexte;
@@ -101,6 +109,12 @@ public class GUI extends JFrame {
         }
         return couleur;
     }
+    public JLabel getAffichage(){
+        if (affichage == null) {
+            affichage = new JLabel();
+        }
+        return affichage;
+    }
     //Singleton TextField
     public JTextField getRefTexte() {
         if (refTexte == null) {
@@ -136,12 +150,39 @@ public class GUI extends JFrame {
     public JRadioButton getRamette() {
         if (ramette == null) {
             ramette = new JRadioButton("Ramette");
+
+
+            // action si Ramette sélectionnée
+            ramette.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //rend inactif laComboBox
+                    getBoxCouleur().setEnabled(false);
+                    getG80().doClick();
+                    //rend actif les CheckBox
+                    getG80().setEnabled(true);
+                    getG100().setEnabled(true);
+                }
+            });
         }
         return ramette;
     }
-    public JRadioButton getStylo() {
+    public JRadioButton getStylo()   {
         if (stylo == null) {
             stylo = new JRadioButton("Stylo");
+
+            //action si Stylo sélectionnée
+            stylo.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //rend inactif les CheckBox
+                    getG80().setEnabled(false);
+                    getG100().setEnabled(false);
+                    //rend actif la ComboBox
+                    getBoxCouleur().setEnabled(true);
+
+                }
+            });
         }
         return stylo;
     }
@@ -173,32 +214,111 @@ public class GUI extends JFrame {
             avant = new JButton(icon);
         }
         return avant;
-    }
+    }//TODO
     public JButton getArriere() {
         if (arriere == null) {
             Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Back24.gif");
             arriere = new JButton(icon);
         }
         return arriere;
-    }
+    }//TODO
     public JButton getRemove() {
         if (remove == null) {
             Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Delete24.gif");
             remove = new JButton(icon);
+
+
         }
         return remove;
-    }
+    }//TODO
     public JButton getSave() {
+        //création du bouton
         if (save == null) {
             Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Save24.gif");
             save = new JButton(icon);
+            //Action du bouton save
+            save.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    CatalogueManager cm = null;
+                    Article article = null;
+                    //Appel du CatalogueManager
+                    try {
+                        cm = CatalogueManager.getInstance();
+                    } catch (BLLException bllException) {
+                        bllException.printStackTrace();
+                    }
+                    //si ramette
+                    if (ramette.isSelected()){
+                        article = new Ramette();
+                        //récupération des données des champs
+                        article.setReference(getRefTexte().getText());
+                        article.setDesignation(getDesignationTexte().getText());
+                        article.setMarque(getMarqueTexte().getText());
+                        article.setQteStock(Integer.parseInt(getStockTexte().getText()));
+                        article.setPrixUnitaire(Integer.parseInt(getPrixTexte().getText()));
+                        //si 80 de grammage
+                        if (g80.isSelected()) {
+                            ((Ramette) article).setGrammage(80);
+                        }
+                        //si 100 de grammage
+                        else{
+                            ((Ramette) article).setGrammage(100);
+                        }
+                    }
+                    //si stylo
+                    else{
+                        article = new Stylo();
+                        article.setReference(getRefTexte().getText());
+                        article.setDesignation(getDesignationTexte().getText());
+                        article.setMarque(getMarqueTexte().getText());
+                        article.setQteStock(Integer.parseInt(getStockTexte().getText()));
+                        article.setPrixUnitaire(Integer.parseInt(getPrixTexte().getText()));
+                        //prendre la couleur sélectionnée de la ComboBox
+                        ((Stylo) article).setCouleur(boxCouleur.getSelectedItem().toString());
+                    }
+                    try {
+                        //si nouvel article
+                        if(article.getIdArticle()==null) {
+                            cm.addArticle(article);
+                            //affichage du résultat
+                            getAffichage().setText("Article bien ajouté");
+                        }else {
+                            //si article existant
+                            cm.updateArticle(article);
+                            //affichage du résultat
+                            getAffichage().setText("Article bien modifié");
+                        }
+                    } catch (BLLException bllException) {
+                        //affichage d'une erreur
+                        getAffichage().setText("Impossible, souci d'attribut");
+
+                    }
+
+
+                }
+            });
         }
         return save;
-    }
+    }//TODO retour à la normale
     public JButton getNvl() {
         if (nvl == null) {
             Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/New24.gif");
             nvl = new JButton(icon);
+
+            //action nvl
+            nvl.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //mets les champs vides
+                    refTexte.setText(null);
+                    designationTexte.setText(null);
+                    marqueTexte.setText(null);
+                    stockTexte.setText(null);
+                    prixTexte.setText(null);
+                    //
+                }
+            });
         }
         return nvl;
     }
@@ -233,6 +353,10 @@ public class GUI extends JFrame {
             gbc.gridy = 4;
             gbc.insets = new Insets(5,5,5,5);
             panneauPrincipal.add(getPanneauButton(), gbc);
+            //Placement label d'erreur
+            gbc.gridx = 0;
+            gbc.gridy = 5;
+            panneauPrincipal.add(getAffichage(),gbc);
         }
         return panneauPrincipal;
     }
@@ -364,7 +488,7 @@ public class GUI extends JFrame {
             //mise en place de la grille de placement
             panneauCouleur.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(0,0,0,105);
+            gbc.insets = new Insets(0,0,0,88);
             panneauCouleur.add(getCouleur(),gbc);
 
             panneauCouleur.add(getBoxCouleur(),gbc);

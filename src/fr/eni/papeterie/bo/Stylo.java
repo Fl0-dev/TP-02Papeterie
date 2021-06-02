@@ -22,6 +22,11 @@ public class Stylo extends Article{
         this.couleur = couleur;
     }
 
+    public Stylo() {
+
+    }
+
+
     //////////////////Getters/Setters///////////////////////
     public String getCouleur() {
         return couleur;

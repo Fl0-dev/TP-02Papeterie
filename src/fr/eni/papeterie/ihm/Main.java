@@ -7,7 +7,6 @@ import javax.swing.*;
  */
 public class Main {
     public static void main(String[] args) {
-
         //création d'un écran principal
         SwingUtilities.invokeLater(
                 //on pourrait faire une lambda (peu importe le nom lance)
