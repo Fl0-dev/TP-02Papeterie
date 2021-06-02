@@ -5,6 +5,9 @@ import fr.eni.papeterie.bo.Couleur;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Création de l'affichage
+ */
 public class GUI extends JFrame {
 
     //panneaux
