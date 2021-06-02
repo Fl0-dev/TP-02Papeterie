@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class GUI extends JFrame {
 
-    //création des panneaux
+    //panneaux
     private JPanel panneauPrincipal;
     private JPanel panneauChamp;
     private JPanel panneauType;
@@ -14,7 +14,7 @@ public class GUI extends JFrame {
     private JPanel panneauCheckBox;
     private JPanel panneauCouleur;
     private JPanel panneauButton;
-    //création des composants du panneau principal
+    //Labels
     private JLabel ref;
     private JLabel designation;
     private JLabel marque;
@@ -23,16 +23,21 @@ public class GUI extends JFrame {
     private JLabel typ;
     private JLabel grammage;
     private JLabel couleur;
+    //TextFields
     private JTextField refTexte;
     private JTextField designationTexte;
     private JTextField marqueTexte;
     private JTextField stockTexte;
     private JTextField prixTexte;
+    //RadioButtons
     private JRadioButton ramette;
     private JRadioButton stylo;
+    //CheckBox
     private JCheckBox g80;
     private JCheckBox g100;
+    //ComboBox
     public JComboBox<String> boxCouleur;
+    //Buttons
     public JButton arriere;
     public JButton avant;
     public JButton remove;
