@@ -21,11 +21,11 @@ public class CatalogueManager {
     ArticleDAO daoArticle;
 
     // constructeur vide privé
-    private CatalogueManager() throws BLLException {
+    private CatalogueManager() {
     }
 
     //création d'une méthode getInstance
-    public static CatalogueManager getInstance() throws BLLException {
+    public static CatalogueManager getInstance() {
         if (instance == null) {
             instance = new CatalogueManager();
         }

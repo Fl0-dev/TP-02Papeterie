@@ -11,12 +11,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Création de l'affichage
  */
 public class GUI extends JFrame {
 
+    //Listes d'articles
+    private List<Article> listDarticles;
+    private int index =0;
     //panneaux
     private JPanel panneauPrincipal;
     private JPanel panneauChamp;
@@ -212,16 +217,126 @@ public class GUI extends JFrame {
         if (avant == null) {
             Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Forward24.gif");
             avant = new JButton(icon);
+            avant.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //si dernier article
+                    if(index == listDarticles.size()-1){
+                        //passage au premier article
+                        index=0;
+                    }
+                    //sinon index suivant donc article
+                    else{
+                        index++;
+                    }
+                    //récupération de l'article à afficher selon son index
+                    Article articleAafficher = listDarticles.get(index);
+                    //Affichage dans la fenêtre
+                    getRefTexte().setText(articleAafficher.getReference());
+                    getDesignationTexte().setText(articleAafficher.getDesignation());
+                    getMarqueTexte().setText(articleAafficher.getMarque());
+                    getStockTexte().setText(String.valueOf(articleAafficher.getQteStock()));
+                    getPrixTexte().setText(String.valueOf(articleAafficher.getPrixUnitaire()));
+                    //Si article est une ramette
+                    if (articleAafficher instanceof Ramette){
+                        getRamette().doClick();
+                        //affichage selon le grammage
+                        if(((Ramette) articleAafficher).getGrammage()==80){
+                            getG80().doClick();
+                        }else{
+                            getG100().doClick();
+                        }
+                        //Si stylo
+                    }else{
+                        getStylo().doClick();
+                        //Si rouge
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.ROUGE))){
+                            getBoxCouleur().setSelectedItem(Couleur.ROUGE);
+                        }
+                        //Si vert
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.VERT))) {
+                            getBoxCouleur().setSelectedItem(Couleur.VERT);
+                        }
+                        //Si noir
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.NOIR))) {
+                            getBoxCouleur().setSelectedItem(Couleur.NOIR);
+                        }
+                        //Si bleu
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.BLEU))) {
+                            getBoxCouleur().setSelectedItem(Couleur.BLEU);
+                        }
+                        //Si jaune
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.JAUNE))) {
+                            getBoxCouleur().setSelectedItem(Couleur.JAUNE);
+                        }
+                    }
+                }
+            });
         }
         return avant;
-    }//TODO
+    }
     public JButton getArriere() {
         if (arriere == null) {
             Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Back24.gif");
             arriere = new JButton(icon);
-        }
+            arriere.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //si premier article
+                    if (index == 0){
+                        //passage au dernier article
+                        index = listDarticles.size()-1;
+                        //sinon
+                    }else {
+                        //précédent index donc article
+                        index--;
+                    }
+                    //récupération de l'article à afficher selon son index
+                    Article articleAafficher = listDarticles.get(index);
+                    //Affichage dans la fenêtre
+                    getRefTexte().setText(articleAafficher.getReference());
+                    getDesignationTexte().setText(articleAafficher.getDesignation());
+                    getMarqueTexte().setText(articleAafficher.getMarque());
+                    getStockTexte().setText(String.valueOf(articleAafficher.getQteStock()));
+                    getPrixTexte().setText(String.valueOf(articleAafficher.getPrixUnitaire()));
+                    //Si article est une ramette
+                    if (articleAafficher instanceof Ramette){
+                        getRamette().doClick();
+                        //affichage selon le grammage
+                        if(((Ramette) articleAafficher).getGrammage()==80){
+                            getG80().doClick();
+                        }else{
+                            getG100().doClick();
+                        }
+                        //Si stylo
+                    }else{
+                        getStylo().doClick();
+                        //Si rouge
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.ROUGE))){
+                            getBoxCouleur().setSelectedItem(Couleur.ROUGE);
+                        }
+                        //Si vert
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.VERT))) {
+                            getBoxCouleur().setSelectedItem(Couleur.VERT);
+                        }
+                        //Si noir
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.NOIR))) {
+                            getBoxCouleur().setSelectedItem(Couleur.NOIR);
+                        }
+                        //Si bleu
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.BLEU))) {
+                            getBoxCouleur().setSelectedItem(Couleur.BLEU);
+                        }
+                        //Si jaune
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.JAUNE))) {
+                            getBoxCouleur().setSelectedItem(Couleur.JAUNE);
+                        }
+                    }
+                }
+            });
+            }
         return arriere;
-    }//TODO
+    }
     public JButton getRemove() {
         if (remove == null) {
             Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Delete24.gif");
@@ -230,7 +345,8 @@ public class GUI extends JFrame {
 
         }
         return remove;
-    }//TODO
+
+    }
     public JButton getSave() {
         //création du bouton
         if (save == null) {
@@ -240,14 +356,10 @@ public class GUI extends JFrame {
             save.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    CatalogueManager cm = null;
-                    Article article = null;
+                    CatalogueManager cm;
+                    Article article;
                     //Appel du CatalogueManager
-                    try {
-                        cm = CatalogueManager.getInstance();
-                    } catch (BLLException bllException) {
-                        bllException.printStackTrace();
-                    }
+                    cm = CatalogueManager.getInstance();
                     //si ramette
                     if (ramette.isSelected()){
                         article = new Ramette();
@@ -256,7 +368,7 @@ public class GUI extends JFrame {
                         article.setDesignation(getDesignationTexte().getText());
                         article.setMarque(getMarqueTexte().getText());
                         article.setQteStock(Integer.parseInt(getStockTexte().getText()));
-                        article.setPrixUnitaire(Integer.parseInt(getPrixTexte().getText()));
+                        article.setPrixUnitaire(Float.parseFloat(getPrixTexte().getText()));
                         //si 80 de grammage
                         if (g80.isSelected()) {
                             ((Ramette) article).setGrammage(80);
@@ -273,7 +385,7 @@ public class GUI extends JFrame {
                         article.setDesignation(getDesignationTexte().getText());
                         article.setMarque(getMarqueTexte().getText());
                         article.setQteStock(Integer.parseInt(getStockTexte().getText()));
-                        article.setPrixUnitaire(Integer.parseInt(getPrixTexte().getText()));
+                        article.setPrixUnitaire(Float.parseFloat(getPrixTexte().getText()));
                         //prendre la couleur sélectionnée de la ComboBox
                         ((Stylo) article).setCouleur(boxCouleur.getSelectedItem().toString());
                     }
@@ -294,8 +406,6 @@ public class GUI extends JFrame {
                         getAffichage().setText("Impossible, souci d'attribut");
 
                     }
-
-
                 }
             });
         }
@@ -526,10 +636,11 @@ public class GUI extends JFrame {
         return panneauButton;
     }
 
+
     /**
      * Méthode pour l'affichage complet
      */
-    public GUI() {
+    public GUI(){
         //donne un titre à la fenêtre
         this.setTitle("Papeterie");
         //Donne une taille à la fenêtre
@@ -539,11 +650,66 @@ public class GUI extends JFrame {
         //permet de fermer le programme quand on ferme la fenêtre
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //évite que la fenêtre soit modifiable
-        this.setResizable(false);
+        //this.setResizable(false);
         // mise en place du panneau principale
         this.setContentPane(getPanneauPrincipal());
         // permet une taille de fenêtre en fonction du panneauPrincipal
         this.pack();
+        //appel de CatalogueManager
+        CatalogueManager cm;
+        cm = CatalogueManager.getInstance();
+        //création d'une liste de tous les articles
+        listDarticles = new ArrayList<>();
+        try {
+            listDarticles = cm.getCatalogue();
+        }catch(BLLException e) {
+            System.out.println(e.getMessage());
+        }
+        //déclaration de l'article à afficher
+        Article articleAafficher;
+        //si la liste est vide
+        if (!listDarticles.isEmpty()){
+            articleAafficher = listDarticles.get(index);
+            //affichage dans la fenêtre
+            getRefTexte().setText(articleAafficher.getReference());//TODO affiche le reste
+            getDesignationTexte().setText(articleAafficher.getDesignation());
+            getMarqueTexte().setText(articleAafficher.getMarque());
+            getStockTexte().setText(String.valueOf(articleAafficher.getQteStock()));
+            getPrixTexte().setText(String.valueOf(articleAafficher.getPrixUnitaire()));
+            //Si article est une ramette
+            if (articleAafficher instanceof Ramette){
+                getRamette().doClick();
+                //affichage selon le grammage
+                if(((Ramette) articleAafficher).getGrammage()==80){
+                    getG80().doClick();
+                }else{
+                    getG100().doClick();
+                }
+                //Si stylo
+            }else{
+                getStylo().doClick();
+                //Si rouge
+                if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.ROUGE))){
+                    getBoxCouleur().setSelectedItem(Couleur.ROUGE);
+                }
+                //Si vert
+                if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.VERT))) {
+                    getBoxCouleur().setSelectedItem(Couleur.VERT);
+                }
+                //Si noir
+                if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.NOIR))) {
+                    getBoxCouleur().setSelectedItem(Couleur.NOIR);
+                }
+                //Si bleu
+                if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.BLEU))) {
+                    getBoxCouleur().setSelectedItem(Couleur.BLEU);
+                }
+                //Si jaune
+                if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.JAUNE))) {
+                    getBoxCouleur().setSelectedItem(Couleur.JAUNE);
+                }
+            }
+        }
         //permet l'affichage de l'écran
         this.setVisible(true);
     }
