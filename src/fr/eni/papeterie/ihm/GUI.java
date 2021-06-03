@@ -432,7 +432,7 @@ public class GUI extends JFrame {
         }
         return save;
 
-    }//TODO retour à la normale
+    }
 
     private void ConstruireArticle() {
         if (ramette.isSelected()) {
