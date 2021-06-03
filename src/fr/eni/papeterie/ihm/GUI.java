@@ -21,7 +21,8 @@ public class GUI extends JFrame {
 
     //Listes d'articles
     private List<Article> listDarticles;
-    private int index =0;
+    private int index = 0;
+    Article articleAafficher;
     //panneaux
     private JPanel panneauPrincipal;
     private JPanel panneauChamp;
@@ -72,85 +73,100 @@ public class GUI extends JFrame {
         }
         return ref;
     }
+
     public JLabel getDesignation() {
         if (designation == null) {
             designation = new JLabel("Désignation");
         }
         return designation;
     }
+
     public JLabel getMarque() {
         if (marque == null) {
             marque = new JLabel("Marque");
         }
         return marque;
     }
+
     public JLabel getStock() {
         if (stock == null) {
             stock = new JLabel("Stock");
         }
         return stock;
     }
+
     public JLabel getPrix() {
         if (prix == null) {
             prix = new JLabel("Prix");
         }
         return prix;
     }
+
     public JLabel getTyp() {
         if (typ == null) {
             typ = new JLabel("Type");
         }
         return typ;
     }
+
     public JLabel getGrammage() {
         if (grammage == null) {
             grammage = new JLabel("Grammage");
         }
         return grammage;
     }
+
     public JLabel getCouleur() {
         if (couleur == null) {
             couleur = new JLabel("Couleur");
         }
         return couleur;
     }
-    public JLabel getAffichage(){
+
+    public JLabel getAffichage() {
         if (affichage == null) {
             affichage = new JLabel();
         }
         return affichage;
     }
+
     //Singleton TextField
     public JTextField getRefTexte() {
         if (refTexte == null) {
-            refTexte = new JTextField(20);
+            refTexte = new JTextField(25);
         }
+
         return refTexte;
     }
+
     public JTextField getDesignationTexte() {
         if (designationTexte == null) {
-            designationTexte = new JTextField(20);
+            designationTexte = new JTextField(25);
         }
         return designationTexte;
     }
+
     public JTextField getMarqueTexte() {
         if (marqueTexte == null) {
-            marqueTexte = new JTextField(20);
+            marqueTexte = new JTextField(25);
         }
         return marqueTexte;
     }
+
     public JTextField getStockTexte() {
         if (stockTexte == null) {
-            stockTexte = new JTextField(20);
+            stockTexte = new JTextField(25);
         }
         return stockTexte;
     }
+
     public JTextField getPrixTexte() {
         if (prixTexte == null) {
-            prixTexte = new JTextField(20);
+            prixTexte = new JTextField(25);
         }
         return prixTexte;
     }
+
     //Singleton RadioButton
     public JRadioButton getRamette() {
         if (ramette == null) {
@@ -172,7 +188,8 @@ public class GUI extends JFrame {
         }
         return ramette;
     }
-    public JRadioButton getStylo()   {
+
+    public JRadioButton getStylo() {
         if (stylo == null) {
             stylo = new JRadioButton("Stylo");
 
@@ -191,6 +208,7 @@ public class GUI extends JFrame {
         }
         return stylo;
     }
+
     //Singleton CheckBox
     public JCheckBox getG80() {
         if (g80 == null) {
@@ -198,12 +216,14 @@ public class GUI extends JFrame {
         }
         return g80;
     }
+
     public JCheckBox getG100() {
         if (g100 == null) {
             g100 = new JCheckBox("100 grammes");
         }
         return g100;
     }
+
     //Singleton ComboBox
     public JComboBox<Couleur> getBoxCouleur() {
         if (boxCouleur == null) {
@@ -212,6 +232,7 @@ public class GUI extends JFrame {
         }
         return boxCouleur;
     }
+
     //Singleton Button
     public JButton getAvant() {
         if (avant == null) {
@@ -221,16 +242,16 @@ public class GUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     //si dernier article
-                    if(index == listDarticles.size()-1){
+                    if (index >= listDarticles.size() - 1) {
                         //passage au premier article
-                        index=0;
+                        index = 0;
                     }
                     //sinon index suivant donc article
-                    else{
+                    else {
                         index++;
                     }
                     //récupération de l'article à afficher selon son index
-                    Article articleAafficher = listDarticles.get(index);
+                    articleAafficher = listDarticles.get(index);
                     //Affichage dans la fenêtre
                     getRefTexte().setText(articleAafficher.getReference());
                     getDesignationTexte().setText(articleAafficher.getDesignation());
@@ -238,19 +259,19 @@ public class GUI extends JFrame {
                     getStockTexte().setText(String.valueOf(articleAafficher.getQteStock()));
                     getPrixTexte().setText(String.valueOf(articleAafficher.getPrixUnitaire()));
                     //Si article est une ramette
-                    if (articleAafficher instanceof Ramette){
+                    if (articleAafficher instanceof Ramette) {
                         getRamette().doClick();
                         //affichage selon le grammage
-                        if(((Ramette) articleAafficher).getGrammage()==80){
+                        if (((Ramette) articleAafficher).getGrammage() == 80) {
                             getG80().doClick();
-                        }else{
+                        } else {
                             getG100().doClick();
                         }
                         //Si stylo
-                    }else{
+                    } else {
                         getStylo().doClick();
                         //Si rouge
-                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.ROUGE))){
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.ROUGE))) {
                             getBoxCouleur().setSelectedItem(Couleur.ROUGE);
                         }
                         //Si vert
@@ -270,11 +291,14 @@ public class GUI extends JFrame {
                             getBoxCouleur().setSelectedItem(Couleur.JAUNE);
                         }
                     }
+                    //efface l'affichage
+                    getAffichage().setText("");
                 }
             });
         }
         return avant;
     }
+
     public JButton getArriere() {
         if (arriere == null) {
             Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Back24.gif");
@@ -283,16 +307,16 @@ public class GUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     //si premier article
-                    if (index == 0){
+                    if (index <= 0) {
                         //passage au dernier article
-                        index = listDarticles.size()-1;
+                        index = listDarticles.size() - 1;
                         //sinon
-                    }else {
+                    } else {
                         //précédent index donc article
                         index--;
                     }
                     //récupération de l'article à afficher selon son index
-                    Article articleAafficher = listDarticles.get(index);
+                    articleAafficher = listDarticles.get(index);
                     //Affichage dans la fenêtre
                     getRefTexte().setText(articleAafficher.getReference());
                     getDesignationTexte().setText(articleAafficher.getDesignation());
@@ -300,19 +324,19 @@ public class GUI extends JFrame {
                     getStockTexte().setText(String.valueOf(articleAafficher.getQteStock()));
                     getPrixTexte().setText(String.valueOf(articleAafficher.getPrixUnitaire()));
                     //Si article est une ramette
-                    if (articleAafficher instanceof Ramette){
+                    if (articleAafficher instanceof Ramette) {
                         getRamette().doClick();
                         //affichage selon le grammage
-                        if(((Ramette) articleAafficher).getGrammage()==80){
+                        if (((Ramette) articleAafficher).getGrammage() == 80) {
                             getG80().doClick();
-                        }else{
+                        } else {
                             getG100().doClick();
                         }
                         //Si stylo
-                    }else{
+                    } else {
                         getStylo().doClick();
                         //Si rouge
-                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.ROUGE))){
+                        if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.ROUGE))) {
                             getBoxCouleur().setSelectedItem(Couleur.ROUGE);
                         }
                         //Si vert
@@ -332,21 +356,42 @@ public class GUI extends JFrame {
                             getBoxCouleur().setSelectedItem(Couleur.JAUNE);
                         }
                     }
+                    //efface l'affichage
+                    getAffichage().setText("");
                 }
             });
-            }
+        }
         return arriere;
     }
+
     public JButton getRemove() {
         if (remove == null) {
             Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Delete24.gif");
             remove = new JButton(icon);
-
-
+            //action du bouton
+            remove.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //Appel du CatalogueManager
+                    CatalogueManager cm = CatalogueManager.getInstance();
+                    try {
+                        //supprime de la base de donnée
+                        cm.removeArticle(articleAafficher.getIdArticle());
+                        getAffichage().setText("Article bien effacé");
+                    } catch (BLLException bllException) {
+                        getAffichage().setText("Impossible, souci d'attribut");
+                    }
+                    getAffichage().setText("Article bien effacé");
+                    //supprime de la liste
+                    listDarticles.remove(articleAafficher);
+                    //efface les champs
+                    getNvl().doClick();
+                }
+            });
         }
         return remove;
-
     }
+
     public JButton getSave() {
         //création du bouton
         if (save == null) {
@@ -357,65 +402,73 @@ public class GUI extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     CatalogueManager cm;
-                    Article article;
                     //Appel du CatalogueManager
                     cm = CatalogueManager.getInstance();
-                    //si ramette
-                    if (ramette.isSelected()){
-                        article = new Ramette();
-                        //récupération des données des champs
-                        article.setReference(getRefTexte().getText());
-                        article.setDesignation(getDesignationTexte().getText());
-                        article.setMarque(getMarqueTexte().getText());
-                        article.setQteStock(Integer.parseInt(getStockTexte().getText()));
-                        article.setPrixUnitaire(Float.parseFloat(getPrixTexte().getText()));
-                        //si 80 de grammage
-                        if (g80.isSelected()) {
-                            ((Ramette) article).setGrammage(80);
+                    //si nouvel article
+                    if (articleAafficher == null) {
+                        //si ramette
+                        ConstruireArticle();
+                        //ajout de l'article
+                        try {
+                            cm.addArticle(articleAafficher);
+                        } catch (BLLException bllException) {
+                            getAffichage().setText("Souci lors de l'ajout");
                         }
-                        //si 100 de grammage
-                        else{
-                            ((Ramette) article).setGrammage(100);
+                        //affichage du résultat
+                        getAffichage().setText("Article bien ajouté");
+                        //si article à modifier
+                    } else {
+                        try {
+                            cm.updateArticle(articleAafficher);
+                        } catch (BLLException bllException) {
+                            bllException.printStackTrace();
                         }
-                    }
-                    //si stylo
-                    else{
-                        article = new Stylo();
-                        article.setReference(getRefTexte().getText());
-                        article.setDesignation(getDesignationTexte().getText());
-                        article.setMarque(getMarqueTexte().getText());
-                        article.setQteStock(Integer.parseInt(getStockTexte().getText()));
-                        article.setPrixUnitaire(Float.parseFloat(getPrixTexte().getText()));
-                        //prendre la couleur sélectionnée de la ComboBox
-                        ((Stylo) article).setCouleur(boxCouleur.getSelectedItem().toString());
-                    }
-                    try {
-                        //si nouvel article
-                        if(article.getIdArticle()==null) {
-                            cm.addArticle(article);
-                            //affichage du résultat
-                            getAffichage().setText("Article bien ajouté");
-                        }else {
-                            //si article existant
-                            cm.updateArticle(article);
-                            //affichage du résultat
-                            getAffichage().setText("Article bien modifié");
-                        }
-                    } catch (BLLException bllException) {
-                        //affichage d'une erreur
-                        getAffichage().setText("Impossible, souci d'attribut");
+                        //affichage du résultat
+                        getAffichage().setText("Article bien modifié");
 
                     }
                 }
             });
         }
         return save;
+
     }//TODO retour à la normale
+
+    private void ConstruireArticle() {
+        if (ramette.isSelected()) {
+            articleAafficher = new Ramette();
+            //récupération des données des champs
+            articleAafficher.setReference(getRefTexte().getText());
+            articleAafficher.setDesignation(getDesignationTexte().getText());
+            articleAafficher.setMarque(getMarqueTexte().getText());
+            articleAafficher.setQteStock(Integer.parseInt(getStockTexte().getText()));
+            articleAafficher.setPrixUnitaire(Float.parseFloat(getPrixTexte().getText()));
+            //si 80 de grammage
+            if (g80.isSelected()) {
+                ((Ramette) articleAafficher).setGrammage(80);
+            }
+            //si 100 de grammage
+            else {
+                ((Ramette) articleAafficher).setGrammage(100);
+            }
+        }
+        //si stylo
+        else {
+            articleAafficher = new Stylo();
+            articleAafficher.setReference(getRefTexte().getText());
+            articleAafficher.setDesignation(getDesignationTexte().getText());
+            articleAafficher.setMarque(getMarqueTexte().getText());
+            articleAafficher.setQteStock(Integer.parseInt(getStockTexte().getText()));
+            articleAafficher.setPrixUnitaire(Float.parseFloat(getPrixTexte().getText()));
+            //prendre la couleur sélectionnée de la ComboBox
+            ((Stylo) articleAafficher).setCouleur(boxCouleur.getSelectedItem().toString());
+        }
+    }
+
     public JButton getNvl() {
         if (nvl == null) {
             Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/New24.gif");
             nvl = new JButton(icon);
-
             //action nvl
             nvl.addActionListener(new ActionListener() {
                 @Override
@@ -426,7 +479,8 @@ public class GUI extends JFrame {
                     marqueTexte.setText(null);
                     stockTexte.setText(null);
                     prixTexte.setText(null);
-                    //
+                    //vide l'articleAafficher
+                    articleAafficher = null;
                 }
             });
         }
@@ -445,7 +499,8 @@ public class GUI extends JFrame {
             //Placement panneauChamp
             gbc.gridx = 0;
             gbc.gridy = 0;
-            panneauPrincipal.add(getPanneauChamp(),gbc);
+            gbc.insets = new Insets(10,0,0,0);
+            panneauPrincipal.add(getPanneauChamp(), gbc);
             //placement panneauRadio
             gbc.gridx = 0;
             gbc.gridy = 1;
@@ -461,12 +516,13 @@ public class GUI extends JFrame {
             //Placement panneauButton
             gbc.gridx = 0;
             gbc.gridy = 4;
-            gbc.insets = new Insets(5,5,5,5);
+            gbc.insets = new Insets(5, 5, 5, 5);
             panneauPrincipal.add(getPanneauButton(), gbc);
             //Placement label d'erreur
             gbc.gridx = 0;
             gbc.gridy = 5;
-            panneauPrincipal.add(getAffichage(),gbc);
+            gbc.insets = new Insets(5,0,20,0);
+            panneauPrincipal.add(getAffichage(), gbc);
         }
         return panneauPrincipal;
     }
@@ -483,7 +539,7 @@ public class GUI extends JFrame {
             gbc.gridx = 0;
             gbc.gridy = 0;
             //le insets touche tous les gbc tant que je n'ai pas créé un new gbc
-            gbc.insets = new Insets(0,5,5,10);
+            gbc.insets = new Insets(0, 5, 5, 10);
             panneauChamp.add(getRef(), gbc);
             gbc.gridx = 0;
             gbc.gridy = 1;
@@ -518,7 +574,7 @@ public class GUI extends JFrame {
     }
 
     //Singleton panneauType
-    public JPanel getPanneauType(){
+    public JPanel getPanneauType() {
         //si pas de panneau
         if (panneauType == null) {
             // création du panneauChamp
@@ -527,22 +583,22 @@ public class GUI extends JFrame {
             panneauType.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
             //Placement Label
-            gbc.insets = new Insets(0,0,0,85);
-            panneauType.add(getTyp(),gbc);
+            gbc.insets = new Insets(0, 0, 0, 85);
+            panneauType.add(getTyp(), gbc);
             //Placement panneauRadio
-            panneauType.add(getPanneauRadio(),gbc);
+            panneauType.add(getPanneauRadio(), gbc);
         }
         return panneauType;
     }
 
     // Singleton panneauRadio
-    public JPanel getPanneauRadio(){
+    public JPanel getPanneauRadio() {
         //si pas de panneau
         if (panneauRadio == null) {
             // création du panneauCouleur
             panneauRadio = new JPanel();
             //mise en place de la grille de placement
-            panneauRadio.setLayout(new BoxLayout(panneauRadio,BoxLayout.Y_AXIS));
+            panneauRadio.setLayout(new BoxLayout(panneauRadio, BoxLayout.Y_AXIS));
             panneauRadio.add(getRamette());
             panneauRadio.add(getStylo());
             //regroupement des 2 boutons radio
@@ -554,7 +610,7 @@ public class GUI extends JFrame {
     }
 
     //Singleton panneauGrammage
-    public JPanel getPanneauGrammage(){
+    public JPanel getPanneauGrammage() {
         //si pas de panneau
         if (panneauGrammage == null) {
             // création du panneauGrammage
@@ -563,22 +619,22 @@ public class GUI extends JFrame {
             panneauGrammage.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
             //Placement Label
-            gbc.insets = new Insets(0,0,0,70);
-            panneauGrammage.add(getGrammage(),gbc);
+            gbc.insets = new Insets(0, 0, 0, 70);
+            panneauGrammage.add(getGrammage(), gbc);
 
-            panneauGrammage.add(getPanneauCheckBox(),gbc);
+            panneauGrammage.add(getPanneauCheckBox(), gbc);
         }
         return panneauGrammage;
     }
 
     // Singleton panneauCheckBox
-    public JPanel getPanneauCheckBox(){
+    public JPanel getPanneauCheckBox() {
         //si pas de panneau
         if (panneauCheckBox == null) {
             // création du panneauCouleur
             panneauCheckBox = new JPanel();
             //mise en place de la grille de placement
-            panneauCheckBox.setLayout(new BoxLayout(panneauCheckBox,BoxLayout.Y_AXIS));
+            panneauCheckBox.setLayout(new BoxLayout(panneauCheckBox, BoxLayout.Y_AXIS));
             panneauCheckBox.add(getG80());
             panneauCheckBox.add(getG100());
             //Regroupement des boutons checkbox
@@ -590,7 +646,7 @@ public class GUI extends JFrame {
     }
 
     //Singleton panneauCouleur
-    public JPanel getPanneauCouleur(){
+    public JPanel getPanneauCouleur() {
         //si pas de panneau
         if (panneauCouleur == null) {
             // création du panneauCouleur
@@ -598,10 +654,10 @@ public class GUI extends JFrame {
             //mise en place de la grille de placement
             panneauCouleur.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(0,0,0,88);
-            panneauCouleur.add(getCouleur(),gbc);
+            gbc.insets = new Insets(0, 0, 0, 88);
+            panneauCouleur.add(getCouleur(), gbc);
 
-            panneauCouleur.add(getBoxCouleur(),gbc);
+            panneauCouleur.add(getBoxCouleur(), gbc);
         }
         return panneauCouleur;
     }
@@ -618,20 +674,20 @@ public class GUI extends JFrame {
             //placement des boutons
             gbc.gridx = 0;
             gbc.gridy = 0;
-            gbc.insets = new Insets(5,1,5,1);
-            panneauButton.add(getArriere(),gbc);
+            gbc.insets = new Insets(5, 1, 5, 1);
+            panneauButton.add(getArriere(), gbc);
             gbc.gridx = 1;
             gbc.gridy = 0;
-            panneauButton.add(getNvl(),gbc);
+            panneauButton.add(getNvl(), gbc);
             gbc.gridx = 2;
             gbc.gridy = 0;
-            panneauButton.add(getSave(),gbc);
+            panneauButton.add(getSave(), gbc);
             gbc.gridx = 3;
             gbc.gridy = 0;
-            panneauButton.add(getRemove(),gbc);
+            panneauButton.add(getRemove(), gbc);
             gbc.gridx = 4;
             gbc.gridy = 0;
-            panneauButton.add(getAvant(),gbc);
+            panneauButton.add(getAvant(), gbc);
         }
         return panneauButton;
     }
@@ -640,11 +696,11 @@ public class GUI extends JFrame {
     /**
      * Méthode pour l'affichage complet
      */
-    public GUI(){
+    public GUI() {
         //donne un titre à la fenêtre
         this.setTitle("Papeterie");
         //Donne une taille à la fenêtre
-        //this.setSize(500, 500);
+        this.setSize(500, 500);
         //permet de centrer la fenêtre si null
         this.setLocationRelativeTo(null);
         //permet de fermer le programme quand on ferme la fenêtre
@@ -654,7 +710,7 @@ public class GUI extends JFrame {
         // mise en place du panneau principale
         this.setContentPane(getPanneauPrincipal());
         // permet une taille de fenêtre en fonction du panneauPrincipal
-        this.pack();
+
         //appel de CatalogueManager
         CatalogueManager cm;
         cm = CatalogueManager.getInstance();
@@ -662,13 +718,12 @@ public class GUI extends JFrame {
         listDarticles = new ArrayList<>();
         try {
             listDarticles = cm.getCatalogue();
-        }catch(BLLException e) {
+        } catch (BLLException e) {
             System.out.println(e.getMessage());
         }
         //déclaration de l'article à afficher
-        Article articleAafficher;
         //si la liste est vide
-        if (!listDarticles.isEmpty()){
+        if (!listDarticles.isEmpty()) {
             articleAafficher = listDarticles.get(index);
             //affichage dans la fenêtre
             getRefTexte().setText(articleAafficher.getReference());//TODO affiche le reste
@@ -677,21 +732,22 @@ public class GUI extends JFrame {
             getStockTexte().setText(String.valueOf(articleAafficher.getQteStock()));
             getPrixTexte().setText(String.valueOf(articleAafficher.getPrixUnitaire()));
             //Si article est une ramette
-            if (articleAafficher instanceof Ramette){
+            if (articleAafficher instanceof Ramette) {
                 getRamette().doClick();
                 //affichage selon le grammage
-                if(((Ramette) articleAafficher).getGrammage()==80){
+                if (((Ramette) articleAafficher).getGrammage() == 80) {
                     getG80().doClick();
-                }else{
+                } else {
                     getG100().doClick();
                 }
                 //Si stylo
-            }else{
+            } else {
                 getStylo().doClick();
+                //selon la couleur
+                //getBoxCouleur().setSelectedItem(Couleur.valueOf(((Stylo)articleAafficher).getCouleur()));
                 //Si rouge
-                if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.ROUGE))){
-                    getBoxCouleur().setSelectedItem(Couleur.ROUGE);
-                }
+                if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.ROUGE))) {
+                    getBoxCouleur().setSelectedItem(Couleur.ROUGE);}
                 //Si vert
                 if (((Stylo) articleAafficher).getCouleur().toUpperCase().equals(String.valueOf(Couleur.VERT))) {
                     getBoxCouleur().setSelectedItem(Couleur.VERT);
@@ -714,4 +770,5 @@ public class GUI extends JFrame {
         this.setVisible(true);
     }
 }
+
 
