@@ -406,7 +406,7 @@ public class GUI extends JFrame {
                     cm = CatalogueManager.getInstance();
                     //si nouvel article
                     if (articleAafficher == null) {
-                        //si ramette
+                        //construction de l'article selon ramette ou stylo
                         ConstruireArticle();
                         //ajout de l'article
                         try {
@@ -419,9 +419,10 @@ public class GUI extends JFrame {
                         //si article à modifier
                     } else {
                         try {
+                            //modifie article
                             cm.updateArticle(articleAafficher);
                         } catch (BLLException bllException) {
-                            bllException.printStackTrace();
+                            getAffichage().setText("Il faut remplir les champs!");
                         }
                         //affichage du résultat
                         getAffichage().setText("Article bien modifié");
@@ -434,7 +435,11 @@ public class GUI extends JFrame {
 
     }
 
+    /**
+     * Méthode pour construire un article
+     */
     private void ConstruireArticle() {
+        //Si ramette
         if (ramette.isSelected()) {
             articleAafficher = new Ramette();
             //récupération des données des champs
