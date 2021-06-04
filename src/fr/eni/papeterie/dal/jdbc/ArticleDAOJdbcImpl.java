@@ -32,7 +32,7 @@ public class ArticleDAOJdbcImpl implements ArticleDAO {
      * @return articleListe
      */
     @Override
-    public List<Article> selectAll() throws BLLException, DALException {
+    public List<Article> selectAll() throws DALException {
         List<Article> articleList = new ArrayList<>();
         //tout ce qui est ouvert dans le try se fermera à la fin du try
         //try with ressourcies

@@ -1,7 +1,5 @@
 package fr.eni.papeterie.ihm;
 
-import fr.eni.papeterie.bll.BLLException;
-
 import javax.swing.*;
 
 /**
