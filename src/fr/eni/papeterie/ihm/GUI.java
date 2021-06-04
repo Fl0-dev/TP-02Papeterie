@@ -236,7 +236,7 @@ public class GUI extends JFrame {
     //Singleton Button
     public JButton getAvant() {
         if (avant == null) {
-            Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Forward24.gif");
+            Icon icon = new ImageIcon("resources/Forward24.gif");
             avant = new JButton(icon);
             avant.addActionListener(new ActionListener() {
                 @Override
@@ -301,7 +301,7 @@ public class GUI extends JFrame {
 
     public JButton getArriere() {
         if (arriere == null) {
-            Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Back24.gif");
+            Icon icon = new ImageIcon("resources/Back24.gif");
             arriere = new JButton(icon);
             arriere.addActionListener(new ActionListener() {
                 @Override
@@ -366,7 +366,7 @@ public class GUI extends JFrame {
 
     public JButton getRemove() {
         if (remove == null) {
-            Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Delete24.gif");
+            Icon icon = new ImageIcon("resources/Delete24.gif");
             remove = new JButton(icon);
             //action du bouton
             remove.addActionListener(new ActionListener() {
@@ -395,7 +395,7 @@ public class GUI extends JFrame {
     public JButton getSave() {
         //création du bouton
         if (save == null) {
-            Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/Save24.gif");
+            Icon icon = new ImageIcon("resources/Save24.gif");
             save = new JButton(icon);
             //Action du bouton save
             save.addActionListener(new ActionListener() {
@@ -472,7 +472,7 @@ public class GUI extends JFrame {
 
     public JButton getNvl() {
         if (nvl == null) {
-            Icon icon = new ImageIcon("src/fr/eni/papeterie/ihm/resources/New24.gif");
+            Icon icon = new ImageIcon("resources/New24.gif");
             nvl = new JButton(icon);
             //action nvl
             nvl.addActionListener(new ActionListener() {
